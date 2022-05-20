@@ -1,38 +1,27 @@
-from collections import namedtuple
-import altair as alt
-import math
-import pandas as pd
+import requests
 import streamlit as st
+from streamlit_lottie import st_lottie
 
-"""
-# Welcome to Streamlit!
+def load_lottie_url(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+    
+def ShowAnimation(name, URL):
+    anim=load_lottie_url(URL)
+    st_lottie(anim, key = name)
+    
+st.markdown('# Animations: https://lottiefiles.com/recent') 
+st.markdown("### Animate with JSON, SVG, Adobe XD, Figma, and deploy to web, mobile as tiny animation files ")
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:
+ShowAnimation("Graph","https://assets6.lottiefiles.com/packages/lf20_4gqhiayj.json")
+ShowAnimation("PhoneBot","https://assets9.lottiefiles.com/packages/lf20_zrqthn6o.json")
+ShowAnimation("SupportBot","https://assets5.lottiefiles.com/private_files/lf30_cmd8kh2q.json")
+ShowAnimation("ChatBot","https://assets8.lottiefiles.com/packages/lf20_j1oeaifz.json")
+ShowAnimation("IntelligentMachine","https://assets8.lottiefiles.com/packages/lf20_edouagsj.json")
+ShowAnimation("GearAI","https://assets10.lottiefiles.com/packages/lf20_3jkp7dqt.json")
+ShowAnimation("ContextGraph","https://assets10.lottiefiles.com/private_files/lf30_vwC61X.json")
+ShowAnimation("Yggdrasil","https://assets4.lottiefiles.com/packages/lf20_8q1bhU.json")
+ShowAnimation("Studying","https://assets9.lottiefiles.com/packages/lf20_6ft9bypa.json")
 
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
-
-In the meantime, below is an example of what you can do with just a few lines of code:
-"""
-
-
-with st.echo(code_location='below'):
-    total_points = st.slider("Number of points in spiral", 1, 5000, 2000)
-    num_turns = st.slider("Number of turns in spiral", 1, 100, 9)
-
-    Point = namedtuple('Point', 'x y')
-    data = []
-
-    points_per_turn = total_points / num_turns
-
-    for curr_point_num in range(total_points):
-        curr_turn, i = divmod(curr_point_num, points_per_turn)
-        angle = (curr_turn + 1) * 2 * math.pi * i / points_per_turn
-        radius = curr_point_num / total_points
-        x = radius * math.cos(angle)
-        y = radius * math.sin(angle)
-        data.append(Point(x, y))
-
-    st.altair_chart(alt.Chart(pd.DataFrame(data), height=500, width=500)
-        .mark_circle(color='#0068c9', opacity=0.5)
-        .encode(x='x:Q', y='y:Q'))
